@@ -1,0 +1,11 @@
+Module
+  name: client_jumpwindow
+  description: Jump Window
+  author: ernesernesto
+  website: -
+  version: 1
+  sandboxed: true
+  scripts: [ jumpwindow.lua ]
+  @onLoad: init()
+  @onUnload: terminate()
+

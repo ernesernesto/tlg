@@ -1,0 +1,9 @@
+MainWindow
+  !text: tr('Jump')
+  size: 450 450
+
+  Button
+    id: jumpButton
+    !text: tr('Jump!')
+    width: 90
+    @onClick: onClickButton()
