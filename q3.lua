@@ -21,10 +21,12 @@ function removePlayerFromParty(playerId, membername)
    local player = Player(playerId)
    local party = player:getParty()
 
-   for _, member in ipairs(party:getMembers()) do
-      local checkName = member:getName()
-      if checkName == memberName then
-         party:removeMember(Player(membername))
+   if party then
+      for _, member in ipairs(party:getMembers()) do
+         local checkName = member:getName()
+         if checkName == memberName then
+            party:removeMember(Player(membername))
+         end
       end
    end
 end
