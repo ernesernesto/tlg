@@ -44,6 +44,12 @@ function Player:onMoveItem(item, count, fromPosition, toPosition, fromCylinder, 
 	return true
 end
 
+function Player:onMove(position, direction)
+	if hasEventCallback(EVENT_CALLBACK_ONMOVE) then
+		EventCallback(EVENT_CALLBACK_ONMOVE, self, position, direction)
+	end
+end
+
 function Player:onItemMoved(item, count, fromPosition, toPosition, fromCylinder, toCylinder)
 	if hasEventCallback(EVENT_CALLBACK_ONITEMMOVED) then
 		EventCallback(EVENT_CALLBACK_ONITEMMOVED, self, item, count, fromPosition, toPosition, fromCylinder, toCylinder)

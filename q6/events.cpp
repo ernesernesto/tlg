@@ -104,6 +104,8 @@ bool Events::load()
 				info.playerOnTradeCompleted = event;
 			} else if (methodName == "onMoveItem") {
 				info.playerOnMoveItem = event;
+			} else if (methodName == "onMove") {
+				info.playerOnMove = event;
 			} else if (methodName == "onItemMoved") {
 				info.playerOnItemMoved = event;
 			} else if (methodName == "onMoveCreature") {
@@ -609,6 +611,36 @@ bool Events::eventPlayerOnMoveItem(Player* player, Item* item, uint16_t count, c
 
 	return scriptInterface.callFunction(7);
 }
+
+void Events::eventPlayerOnMove(Player *player, const Position &position,
+                               Direction direction) {
+	// Player:onMove(position, direction) or Player.onMove(self,
+	// position, direaction)
+	if (info.playerOnMove == -1) {
+	  return;
+	}
+
+	if (!scriptInterface.reserveScriptEnv()) {
+	  std::cout << "[Error - Events::eventPlayerOnMove] Call stack overflow"
+	            << std::endl;
+	  return;
+	}
+
+	ScriptEnvironment *env = scriptInterface.getScriptEnv();
+	env->setScriptId(info.playerOnMove, &scriptInterface);
+
+	lua_State *L = scriptInterface.getLuaState();
+	scriptInterface.pushFunction(info.playerOnMove);
+
+	LuaScriptInterface::pushUserdata<Player>(L, player);
+	LuaScriptInterface::setMetatable(L, -1, "Player");
+
+	LuaScriptInterface::pushPosition(L, position);
+	lua_pushnumber(L, direction);
+
+	scriptInterface.callVoidFunction(3);
+}
+
 
 void Events::eventPlayerOnItemMoved(Player* player, Item* item, uint16_t count, const Position& fromPosition, const Position& toPosition, Cylinder* fromCylinder, Cylinder* toCylinder)
 {
