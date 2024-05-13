@@ -847,6 +847,15 @@ ReturnValue Game::internalMoveCreature(Creature& creature, Tile& toTile, uint32_
 	}
 
 	map.moveCreature(creature, toTile);
+
+	Player* player = creature.getPlayer();
+	if (player)
+	{
+		Position fromPosition = player->getTile()->getPosition();
+		Direction direction = player->getDirection();
+		g_events->eventPlayerOnMove(player, fromPosition, direction);
+	}
+
 	if (creature.getParent() != &toTile) {
 		return RETURNVALUE_NOERROR;
 	}
